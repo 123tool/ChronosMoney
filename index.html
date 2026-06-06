@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="SPY-E & 123Tool">
+    <meta name="description" content="Professional Time-to-Money Calculator - Calculate real working hours required to afford items.">
+    <title>ChronosMoney // Time-to-Money Calculator</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Premium Smooth Transitions & Scrollbar */
+        *, ::before, ::after {
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        
+        /* Watermark & Premium Accents */
+        .premium-blur {
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+    <header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 premium-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-brand-600 rounded-xl text-white shadow-lg shadow-brand-500/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-xs font-bold tracking-widest text-slate-400 block uppercase font-mono">SPY-E & 123Tool</span>
+                    <h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Chronos<span class="text-brand-600 dark:text-brand-500">Money</span></h1>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button id="themeToggleBtn" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" aria-label="Toggle Theme">
+                    <svg id="themeToggleLightIcon" class="hidden h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 17.95a1 1 0 011.414 0l.707.707a1 1 0 11-1.414 1.414l-.707-.707a1 1 0 010-1.414zm-1.414-14.14a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+                    <svg id="themeToggleDarkIcon" class="hidden h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8 8 0 1011.586 11.586z"/></svg>
+                </button>
+                <div class="text-xs font-mono text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hidden sm:block">
+                    v1.0.0 // PRODUCTION
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <section class="lg:col-span-1 bg-white dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                <form id="calcForm" class="space-y-5" onsubmit="return false;">
+                    <div>
+                        <h2 class="text-sm font-bold tracking-wider uppercase text-slate-400 dark:text-slate-500 font-mono mb-4">Financial Configuration</h2>
+                    </div>
+
+                    <div>
+                        <label for="currency" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Target Currency</label>
+                        <select id="currency" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium">
+                            <option value="IDR">IDR (Rp) - Rupiah</option>
+                            <option value="USD">USD ($) - US Dollar</option>
+                            <option value="EUR">EUR (€) - Euro</option>
+                            <option value="SGD">SGD (S$) - Singapore Dollar</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="hourlyWage" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Hourly Wage (Gross)</label>
+                        <div class="relative rounded-xl shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <span class="text-slate-400 text-sm font-mono currency-symbol">Rp</span>
+                            </div>
+                            <input type="number" id="hourlyWage" min="1" step="any" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl pl-14 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono" placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="taxRate" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Estimated Income Tax / Deductions</label>
+                        <div class="relative rounded-xl shadow-sm">
+                            <input type="number" id="taxRate" min="0" max="100" step="0.1" value="0" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl pl-4 pr-12 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono" placeholder="0">
+                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                <span class="text-slate-400 text-sm font-mono">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-100 dark:border-slate-900 my-4"></div>
+
+                    <div>
+                        <h2 class="text-sm font-bold tracking-wider uppercase text-slate-400 dark:text-slate-500 font-mono mb-4">Target Item / Service</h2>
+                    </div>
+
+                    <div>
+                        <label for="itemName" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Item Name</label>
+                        <input type="text" id="itemName" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="e.g., MacBook Pro M4">
+                    </div>
+
+                    <div>
+                        <label for="itemPrice" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Item Price</label>
+                        <div class="relative rounded-xl shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <span class="text-slate-400 text-sm font-mono currency-symbol">Rp</span>
+                            </div>
+                            <input type="number" id="itemPrice" min="1" step="any" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl pl-14 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono" placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="calculateBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-xl py-3.5 px-4 transition shadow-lg shadow-brand-500/10 hover:shadow-brand-500/20 flex items-center justify-center space-x-2 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 dark:focus:ring-offset-slate-950">
+                        <span>Compute Time Required</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </button>
+                </form>
+
+                <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-900 flex justify-between items-center text-[11px] font-mono text-slate-400">
+                    <span>ENGINE: WORKTIME-CORE v1.0</span>
+                    <span>© SPY-E & 123Tool</span>
+                </div>
+            </section>
+
+            <section class="lg:col-span-2 space-y-6">
+                
+                <div id="resultStatePlaceholder" class="bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-12 text-center flex flex-col items-center justify-center h-[320px] shadow-sm">
+                    <div class="p-4 bg-slate-50 dark:bg-slate-900 text-slate-400 dark:text-slate-600 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 002-2H5a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-slate-900 dark:text-white font-medium mb-1">Awaiting Core Parameters</h3>
+                    <p class="text-sm text-slate-500 max-w-sm">Input your hourly financial details and target asset pricing to generate real-time metrics dashboards.</p>
+                </div>
+
+                <div id="resultsDashboard" class="hidden space-y-6">
+                    <div class="bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm relative overflow-hidden">
+                        
+                        <div class="absolute top-0 right-0 w-48 h-48 bg-brand-500/5 dark:brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                        
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="text-xs font-bold tracking-wider uppercase text-brand-600 dark:text-brand-400 font-mono">Calculated Analytics</span>
+                            <span id="outputTimestamp" class="text-xs font-mono text-slate-400">TIMESTAMP --/--</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-slate-50 dark:bg-slate-900 p-5 rounded-xl border border-slate-100 dark:border-slate-800/60">
+                                <span class="block text-xs font-semibold tracking-wide uppercase text-slate-400 mb-1">Total Target Working Hours</span>
+                                <div class="flex items-baseline space-x-2">
+                                    <span id="outputHours" class="text-4xl font-bold font-mono tracking-tight text-slate-900 dark:text-white">0.0</span>
+                                    <span class="text-sm font-medium text-slate-500 font-mono">Hours</span>
+                                </div>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-2 border-t border-slate-200 dark:border-slate-800 pt-2" id="netWageMeta">
+                                    Net hourly wage factored: <span class="font-mono">0</span>
+                                </p>
+                            </div>
+
+                            <div class="bg-slate-50 dark:bg-slate-900 p-5 rounded-xl border border-slate-100 dark:border-slate-800/60">
+                                <span class="block text-xs font-semibold tracking-wide uppercase text-slate-400 mb-1">Standard Work Shift Equivalent</span>
+                                <div class="flex items-baseline space-x-2">
+                                    <span id="outputShifts" class="text-4xl font-bold font-mono tracking-tight text-slate-900 dark:text-white">0.0</span>
+                                    <span class="text-sm font-medium text-slate-500 font-mono">Shifts</span>
+                                </div>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-2 border-t border-slate-200 dark:border-slate-800 pt-2">
+                                    Based on standard <span class="font-mono">8-hour/day</span> shifts.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-brand-50/50 dark:bg-brand-950/20 border border-brand-100 dark:border-brand-900/40 rounded-xl text-xs flex items-start space-x-3 text-slate-600 dark:text-slate-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-brand-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div>
+                                <span class="font-bold block text-slate-900 dark:text-white mb-0.5">Chronos Realization Insights</span>
+                                To purchase <span id="outputContextItem" class="font-semibold text-brand-600 dark:text-brand-400">the item</span>, you must dedicate exactly <span id="outputContextHours" class="font-semibold font-mono">0</span> of pure uninterrupted focused labor. This excludes living expenses, structural overheads, and non-disposable asset locks.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-950 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-sm font-bold tracking-wider uppercase text-slate-400 dark:text-slate-500 font-mono">Calculation History Ledger</h3>
+                            <p class="text-xs text-slate-400">Persisted safely locally inside your secure sandboxed browser storage.</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="exportCsvBtn" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium rounded-lg font-mono transition flex items-center space-x-1">
+                                <span>EXPORT</span>
+                            </button>
+                            <button id="clearHistoryBtn" class="px-3 py-1.5 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 text-red-600 dark:text-red-400 text-xs font-medium rounded-lg font-mono transition">
+                                CLEAR ALL
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto border border-slate-100 dark:border-slate-800/80 rounded-xl">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 font-mono text-slate-400">
+                                    <th class="p-3 font-semibold uppercase tracking-wider">Item & Metric</th>
+                                    <th class="p-3 font-semibold uppercase tracking-wider text-right">Price Valuation</th>
+                                    <th class="p-3 font-semibold uppercase tracking-wider text-right">Net Hourly Rate</th>
+                                    <th class="p-3 font-semibold uppercase tracking-wider text-right text-brand-600 dark:text-brand-400">Hours Needed</th>
+                                    <th class="p-3 font-semibold uppercase tracking-wider text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody" class="divide-y divide-slate-100 dark:divide-slate-800/60 font-medium">
+                                <tr>
+                                    <td colspan="5" class="p-8 text-center text-slate-400 font-mono bg-white dark:bg-slate-950">No operational records recorded in local ledger state.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 py-4 text-center text-xs font-mono text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0">
+            <div>
+                System Architecture Deployment &copy; 2026. All rights reserved.
+            </div>
+            <div class="flex items-center space-x-4">
+                <span>Secure Client Sandboxed Core</span>
+                <span class="text-slate-300 dark:text-slate-700">|</span>
+                <span class="text-brand-600 dark:text-brand-400 font-bold">Authorized Sign-off: SPY-E & 123Tool</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * CHRONOSMONEY APPLICATION CORE CONTROLLER
+         * Architected by: SPY-E & 123Tool
+         * Clean Functional-Modular Native Implementation
+         */
+        (function() {
+            'use strict';
+
+            // APPLICATION STATE STATE SPECIFICATION
+            const STORAGE_KEY = 'CHRONOSMONEY_ENGINE_DATA';
+            let historyState = [];
+
+            // MULTI-CURRENCY CONTEXT CONFIGURATION SPECIFICATION
+            const CURRENCY_MAP = {
+                IDR: { symbol: 'Rp', locale: 'id-ID', options: { minimumFractionDigits: 0, maximumFractionDigits: 0 } },
+                USD: { symbol: '$', locale: 'en-US', options: { style: 'currency', currency: 'USD' } },
+                EUR: { symbol: '€', locale: 'de-DE', options: { style: 'currency', currency: 'EUR' } },
+                SGD: { symbol: 'S$', locale: 'en-SG', options: { style: 'currency', currency: 'SGD' } }
+            };
+
+            // CACHED DOM INTERFACE NODES
+            const DOM = {
+                html: document.documentElement,
+                themeToggleDarkIcon: document.getElementById('themeToggleDarkIcon'),
+                themeToggleLightIcon: document.getElementById('themeToggleLightIcon'),
+                themeToggleBtn: document.getElementById('themeToggleBtn'),
+                calcForm: document.getElementById('calcForm'),
+                currency: document.getElementById('currency'),
+                hourlyWage: document.getElementById('hourlyWage'),
+                taxRate: document.getElementById('taxRate'),
+                itemName: document.getElementById('itemName'),
+                itemPrice: document.getElementById('itemPrice'),
+                currencySymbols: document.querySelectorAll('.currency-symbol'),
+                resultStatePlaceholder: document.getElementById('resultStatePlaceholder'),
+                resultsDashboard: document.getElementById('resultsDashboard'),
+                outputHours: document.getElementById('outputHours'),
+                outputShifts: document.getElementById('outputShifts'),
+                netWageMeta: document.getElementById('netWageMeta'),
+                outputContextItem: document.getElementById('outputContextItem'),
+                outputContextHours: document.getElementById('outputContextHours'),
+                outputTimestamp: document.getElementById('outputTimestamp'),
+                historyTableBody: document.getElementById('historyTableBody'),
+                clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+                exportCsvBtn: document.getElementById('exportCsvBtn')
+            };
+
+            // ==========================================
+            // SYSTEM THEME ENGINES (DARK MODE MANAGEMENT)
+            // ==========================================
+            function initThemeEngine() {
+                if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    DOM.html.classList.add('dark');
+                    DOM.themeToggleLightIcon.classList.remove('hidden');
+                } else {
+                    DOM.html.classList.remove('dark');
+                    DOM.themeToggleDarkIcon.classList.remove('hidden');
+                }
+            }
+
+            function toggleTheme() {
+                DOM.themeToggleDarkIcon.classList.toggle('hidden');
+                DOM.themeToggleLightIcon.classList.toggle('hidden');
+
+                if (DOM.html.classList.contains('dark')) {
+                    DOM.html.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    DOM.html.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+
+            // ==========================================
+            // UTILITIES / FORMATTERS ENGINE
+            // ==========================================
+            function sanitizeString(str) {
+                const temp = document.createElement('div');
+                temp.textContent = str;
+                return temp.innerHTML;
+            }
+
+            function formatCurrencyValue(value, currencyCode) {
+                const cfg = CURRENCY_MAP[currencyCode] || CURRENCY_MAP.IDR;
+                if(currencyCode === 'IDR') {
+                    return 'Rp' + parseFloat(value).toLocaleString(cfg.locale, cfg.options);
+                }
+                return parseFloat(value).toLocaleString(cfg.locale, cfg.options);
+            }
+
+            function updateUIOnCurrencyChange() {
+                const selectedCurrency = DOM.currency.value;
+                const cfg = CURRENCY_MAP[selectedCurrency] || CURRENCY_MAP.IDR;
+                DOM.currencySymbols.forEach(el => {
+                    el.textContent = cfg.symbol;
+                });
+            }
+
+            // ==========================================
+            // CALCULATION LOGIC & STATE PERSISTENCE
+            // ==========================================
+            function loadStateFromStorage() {
+                try {
+                    const rawData = localStorage.getItem(STORAGE_KEY);
+                    historyState = rawData ? JSON.parse(rawData) : [];
+                } catch (e) {
+                    console.error("Critical error auditing or reading state data, rebuilding engine context.", e);
+                    historyState = [];
+                }
+                renderHistoryLedger();
+            }
+
+            function saveStateToStorage() {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(historyState));
+                renderHistoryLedger();
+            }
+
+            function processCalculation() {
+                const config = {
+                    currency: DOM.currency.value,
+                    hourlyWage: parseFloat(DOM.hourlyWage.value),
+                    taxRate: parseFloat(DOM.taxRate.value || 0),
+                    itemName: DOM.itemName.value.trim(),
+                    itemPrice: parseFloat(DOM.itemPrice.value)
+                };
+
+                // Guard Clauses Validation
+                if (!config.itemName || isNaN(config.hourlyWage) || isNaN(config.itemPrice) || config.hourlyWage <= 0 || config.itemPrice <= 0) {
+                    alert("Invalid operational bounds parameter verification.");
+                    return;
+                }
+
+                // Mathematical Derivations
+                const taxMultiplier = 1 - (config.taxRate / 100);
+                const netHourlyWage = config.hourlyWage * taxMultiplier;
+                
+                if (netHourlyWage <= 0) {
+                    alert("Operational failure: Net hourly calculation falls below or equal to zero boundary limits due to extreme overhead taxes.");
+                    return;
+                }
+
+                const absoluteHoursRequired = config.itemPrice / netHourlyWage;
+                const standardShifts = absoluteHoursRequired / 8; // 8 Operational work hours standard metric context shift
+
+                const logRecord = {
+                    id: 'REC-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+                    timestamp: new Date().toLocaleString(),
+                    itemName: config.itemName,
+                    itemPrice: config.itemPrice,
+                    hourlyWage: config.hourlyWage,
+                    taxRate: config.taxRate,
+                    netHourlyWage: netHourlyWage,
+                    hoursRequired: absoluteHoursRequired,
+                    shiftsRequired: standardShifts,
+                    currency: config.currency
+                };
+
+                // Commit transactional log record block execution to unshift order state stack
+                historyState.unshift(logRecord);
+                saveStateToStorage();
+
+                // Hydrate Metrics Dashboard UI Display Elements
+                renderActiveMetrics(logRecord);
+            }
+
+            function renderActiveMetrics(record) {
+                DOM.resultStatePlaceholder.classList.add('hidden');
+                DOM.resultsDashboard.classList.remove('hidden');
+
+                DOM.outputHours.textContent = record.hoursRequired.toFixed(1);
+                DOM.outputShifts.textContent = record.shiftsRequired.toFixed(1);
+                DOM.netWageMeta.innerHTML = `Net hourly wage factored: <span class="font-mono font-semibold">${formatCurrencyValue(record.netHourlyWage, record.currency)}/hr</span> (After ${record.taxRate}% tax deduction)`;
+                
+                DOM.outputContextItem.textContent = `"${sanitizeString(record.itemName)}"`;
+                DOM.outputContextHours.textContent = `${record.hoursRequired.toFixed(1)} absolute total human hours`;
+                DOM.outputTimestamp.textContent = `COMPUTATION ID: ${record.id}`;
+            }
+
+            function deleteLedgerRecord(recordId) {
+                historyState = historyState.filter(rec => rec.id !== recordId);
+                saveStateToStorage();
+                
+                // If history becomes empty, transition back viewport state placeholder
+                if (historyState.length === 0) {
+                    DOM.resultsDashboard.classList.add('hidden');
+                    DOM.resultStatePlaceholder.classList.remove('hidden');
+                }
+            }
+
+            function renderHistoryLedger() {
+                if (historyState.length === 0) {
+                    DOM.historyTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="p-8 text-center text-slate-400 font-mono bg-white dark:bg-slate-950">No operational records recorded in local ledger state.</td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                DOM.historyTableBody.innerHTML = historyState.map(record => {
+                    return `
+                        <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-900/40 transition">
+                            <td class="p-3">
+                                <div class="font-semibold text-slate-900 dark:text-white max-w-[180px] md:max-w-xs truncate">${sanitizeString(record.itemName)}</div>
+                                <div class="text-[10px] text-slate-400 font-mono mt-0.5">${record.timestamp}</div>
+                            </td>
+                            <td class="p-3 text-right font-mono text-slate-600 dark:text-slate-300">
+                                ${formatCurrencyValue(record.itemPrice, record.currency)}
+                            </td>
+                            <td class="p-3 text-right font-mono text-slate-500">
+                                ${formatCurrencyValue(record.netHourlyWage, record.currency)}/hr
+                            </td>
+                            <td class="p-3 text-right font-mono font-semibold text-brand-600 dark:text-brand-400 text-sm">
+                                ${record.hoursRequired.toFixed(1)}h
+                            </td>
+                            <td class="p-3 text-center">
+                                <button data-id="${record.id}" class="delete-record-btn p-1.5 text-slate-400 hover:text-red-500 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition" title="Purge Record">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            function clearAllHistoryContext() {
+                if (historyState.length === 0) return;
+                if (confirm("Are you securely authorized to execute absolute deletion of all local persistent computational calculation histories? This action is irreversible.")) {
+                    historyState = [];
+                    saveStateToStorage();
+                    DOM.resultsDashboard.classList.add('hidden');
+                    DOM.resultStatePlaceholder.classList.remove('hidden');
+                }
+            }
+
+            function exportLedgerToCsv() {
+                if (historyState.length === 0) {
+                    alert("No operation logs data available for structural csv serialization downstream pipelines.");
+                    return;
+                }
+
+                let csvPayload = 'Record ID,Timestamp,Item Name,Price,Currency,Gross Hourly Wage,Tax Rate (%),Net Hourly Wage,Hours Required,Shifts Required\r\n';
+                
+                historyState.forEach(rec => {
+                    csvPayload += `"${rec.id}","${rec.timestamp}","${rec.itemName.replace(/"/g, '""')}",${rec.itemPrice},"${rec.currency}",${rec.hourlyWage},${rec.taxRate},${rec.netHourlyWage},${rec.hoursRequired.toFixed(4)},${rec.shiftsRequired.toFixed(4)}\r\n`;
+                });
+
+                const blob = new Blob([csvPayload], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const tempLink = document.createElement('a');
+                tempLink.setAttribute('href', url);
+                tempLink.setAttribute('download', `CHRONOSMONEY_METRICS_EXPORT_${Date.now()}.csv`);
+                tempLink.style.visibility = 'hidden';
+                document.body.appendChild(tempLink);
+                tempLink.click();
+                document.body.removeChild(tempLink);
+            }
+
+            // ==========================================
+            // PIPELINE INITIALIZATION & EVENT LISTENERS
+            // ==========================================
+            function bindSystemEventListeners() {
+                DOM.themeToggleBtn.addEventListener('click', toggleTheme);
+                DOM.currency.addEventListener('change', () => {
+                    updateUIOnCurrencyChange();
+                });
+                DOM.calcForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    processCalculation();
+                });
+                DOM.clearHistoryBtn.addEventListener('click', clearAllHistoryContext);
+                DOM.exportCsvBtn.addEventListener('click', exportLedgerToCsv);
+                
+                // Event Delegation pattern context deployment for dynamic row deletes
+                DOM.historyTableBody.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('delete-record-btn')) {
+                        const targetId = e.target.getAttribute('data-id');
+                        deleteLedgerRecord(targetId);
+                    }
+                });
+            }
+
+            // Bootstrap Orchestrator Core Initialization
+            function runDiagnosticsBootstrapEngine() {
+                initThemeEngine();
+                updateUIOnCurrencyChange();
+                loadStateFromStorage();
+                bindSystemEventListeners();
+                console.log("ChronosMoney Engine successfully operational. Client context authenticated. Author: SPY-E & 123Tool");
+            }
+
+            // Initialize App Context
+            document.addEventListener('DOMContentLoaded', runDiagnosticsBootstrapEngine);
+        })();
+    </script>
+</body>
+</html>
